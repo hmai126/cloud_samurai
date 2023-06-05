@@ -341,7 +341,9 @@ class level1 extends Phaser.Scene
 
             this.currentPlayer.inAir = true;
             //
+            // mine
             this.currentPlayer.anims.play('purplejump', true);
+            //
             this.currentPlayer.setVelocityY(-230);
 
             window.showit = true;
