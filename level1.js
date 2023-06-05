@@ -39,6 +39,8 @@ class level1 extends Phaser.Scene
         this.load.image('redrun1', 'sprite_purp_samurai_run1.png');
         this.load.image('redrun2', 'sprite_purp_samurai_run2.png');
         this.load.image('redrun3', 'sprite_purp_samurai_run3.png');
+        this.load.image('purple_jump', 'Purp Samurai Jump.png');
+        this.load.image('red_jump', 'Red Samurai Jump.png');
         //
     
         this.load.image('sky', 'sky.png');
@@ -135,7 +137,6 @@ class level1 extends Phaser.Scene
             frameRate: 2,
             repeat: -1
         });
-        this.currentPlayer.anims.play('purpleidle');
 
         this.anims.create({
             key: 'purplerun',
@@ -146,6 +147,14 @@ class level1 extends Phaser.Scene
                 {key: 'purplerun3'},
             ],
             frameRate: 3,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'purplejump',
+            frames: [
+                {key: 'purple_jump'},
+            ],
+            frameRate: 1,
             repeat: 0
         });
         //
@@ -282,20 +291,25 @@ class level1 extends Phaser.Scene
     update ()
     {
         
-        
+        if (!(this.cursors.left._justDown) && !(this.cursors.up._justDown) && !(this.cursors.down._justDown) && !(this.cursors.right._justDown) && this.currentPlayer.scene) {
+            this.currentPlayer.anims.play('purpleidle', true);
+        }
 
-        if (this.cursors.left.isDown && this.currentPlayer.scene)
+        if (this.cursors.left._justDown && this.currentPlayer.scene)
         {
             this.currentPlayer.setVelocityX(-160);
 
             //this.currentPlayer.anims.play('left', true);
+            this.currentPlayer.flipX = true;
+            this.currentPlayer.anims.play('purplerun', true);
         }
-        else if (this.cursors.right.isDown && this.currentPlayer.scene)
+        else if (this.cursors.right._justDown && this.currentPlayer.scene)
         {
             this.currentPlayer.setVelocityX(160);
 
             //this.currentPlayer.anims.play('right', true);
-            this.currentPlayer.anims.play('purplerun');
+            this.currentPlayer.flipX = false;
+            this.currentPlayer.anims.play('purplerun', true);
         }
         else
         {
@@ -304,7 +318,7 @@ class level1 extends Phaser.Scene
             //this.currentPlayer.anims.play('turn');
         }
 
-        if (this.cursors.up.isDown && this.currentPlayer.body.touching.down && this.currentPlayer.scene)
+        if (this.cursors.up._justDown && this.currentPlayer.body.touching.down && this.currentPlayer.scene)
         {
             // mine
             this.music =  this.sound.add('jumpSFX', {
@@ -327,7 +341,7 @@ class level1 extends Phaser.Scene
 
             this.currentPlayer.inAir = true;
             //
-
+            this.currentPlayer.anims.play('purplejump', true);
             this.currentPlayer.setVelocityY(-230);
 
             window.showit = true;
